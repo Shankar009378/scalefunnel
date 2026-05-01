@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
             userAgent: "*",
             allow: "/",
         },
-        sitemap: "https://scalefunnel.com/sitemap.xml", // ← replace
+        sitemap: "https://scalefunnel.in/sitemap.xml", // ← replace
     };
 }

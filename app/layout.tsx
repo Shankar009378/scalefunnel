@@ -22,7 +22,7 @@ const SITE = {
   title: "ScaleFunnel — Full-Stack Developer & Placement Mentor",
   description:
     "Full-Stack Developer (Deloitte). I build production-ready web and mobile products that move real numbers — and help students crack internships and placements with proven strategy.",
-  url: "https://scalefunnel.com", // ← replace with your real domain
+  url: "https://scalefunnel.in", // ← replace with your real domain
   author: "Shankar Kumar Nanda",
   twitterHandle: "@shankarnanda26", // ← replace
   locale: "en_US",
