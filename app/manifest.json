@@ -1,0 +1,24 @@
+{
+    "name": "ScaleFunnel — Full-Stack Developer & Mentor",
+    "short_name": "ScaleFunnel",
+    "description": "Full-Stack Developer building products that move real numbers, and helping students crack internships and placements.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0a0a0a",
+    "theme_color": "#F97316",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/web-app-manifest-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/web-app-manifest-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}
