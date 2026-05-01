@@ -24,6 +24,8 @@ const Button: React.FC<ButtonProps> = ({
             "bg-white dark:bg-gray-900 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-800 focus:ring-gray-300 dark:focus:ring-gray-600 shadow-sm border border-gray-200 dark:border-gray-700",
         outline:
             "bg-white dark:bg-black text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-900 focus:ring-gray-300 dark:focus:ring-gray-600",
+        inverted:
+            "bg-black text-white dark:bg-white dark:text-black hover:bg-black/90 dark:hover:bg-white/90 focus:ring-black dark:focus:ring-white",
     };
 
     return (
