@@ -1,5 +1,6 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
+import { useRouter } from "next/navigation";
 
 // TypeScript interfaces
 interface PricingFeature {
@@ -105,6 +106,110 @@ const pricingPlans: PricingPlan[] = [
 
 // Individual Pricing Card Component
 const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const handlePayment = async () => {
+    // For "Get Your Product Built" — custom quote, route to contact instead.
+    if (plan.name === "Get Your Product Built") {
+      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+
+    // Quick prompt for name + email. For v1 this is fine; later you can build a proper modal.
+    const customerName = prompt("Your name?");
+    if (!customerName || customerName.length < 2) return;
+
+    const customerEmail = prompt("Your email?");
+    if (!customerEmail || !customerEmail.includes("@")) return;
+
+    setIsLoading(true);
+
+    try {
+      // 1. Create order on server
+      const orderRes = await fetch("/api/razorpay/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          plan: plan.name,
+          amount: 0, // ignored — server enforces price
+          customerName,
+          customerEmail,
+        }),
+      });
+
+      if (!orderRes.ok) {
+        throw new Error("Could not create order");
+      }
+
+      const { orderId, amount, currency, keyId } = await orderRes.json();
+
+      // 2. Open Razorpay checkout
+      const options: RazorpayOptions = {
+        key: keyId,
+        amount,
+        currency,
+        name: "ScaleFunnel",
+        description: plan.name,
+        order_id: orderId,
+        prefill: {
+          name: customerName,
+          email: customerEmail,
+        },
+        theme: {
+          color: "#F97316", // your primary
+        },
+        handler: async (response) => {
+          // 3. Verify signature on server
+          const verifyRes = await fetch("/api/razorpay/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(response),
+          });
+
+          const data = await verifyRes.json();
+
+          console.log("[verify response]", data);
+
+          if (data.verified) {
+            // ✅ Success — redirect or show confirmation
+            alert(
+              "Payment successful! I'll reach out within 24 hours to schedule your session."
+            );
+            const params = new URLSearchParams({
+              payment_id: data.paymentId ?? "",
+              plan: data.plan ?? "",
+              name: data.customerName ?? "",
+              email: data.customerEmail ?? "",
+            });
+            // Optional: redirect to a thank-you page
+            // window.location.href = "/thank-you";
+            router.push(`/thank-you?${params.toString()}`);
+          } else {
+            alert(
+              "Payment captured but verification failed. Don't worry — I'll see it in my dashboard and reach out."
+            );
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            setIsLoading(false);
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.on("payment.failed", (response) => {
+        alert(`Payment failed: ${response.error.description}`);
+        setIsLoading(false);
+      });
+      rzp.open();
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Something went wrong. Please try the contact form instead.");
+      setIsLoading(false);
+    }
+  };
 
   const handleClick = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
@@ -162,9 +267,13 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
           </li>
         ))}
       </ul>
-      <button onClick={handleClick} className={`${buttonClasses} group`}>
-        {plan.buttonText}
-        <span className="transition-transform group-hover:translate-x-1"> -&gt;</span>
+      <button
+        onClick={handlePayment}
+        disabled={isLoading}
+        className={`${buttonClasses} group disabled:opacity-60 disabled:cursor-not-allowed`}
+      >
+        {isLoading ? "Processing..." : plan.buttonText}
+        <span className="transition-transform group-hover:translate-x-1">→</span>
       </button>
       {plan.name === "1:1 Guidance" && (
         <p className="text-xs text-muted-foreground mt-3 text-center">

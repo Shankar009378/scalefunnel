@@ -11,6 +11,12 @@ function Footer2() {
         { name: "Contact", href: "#contact" },
     ];
 
+    const legalLinks = [
+        { name: "Privacy Policy", href: "/privacy-policy" },
+        { name: "Terms of Service", href: "/terms" },
+        { name: "Refund Policy", href: "/refund-policy" },
+    ];
+
     const socialIcons = [
         {
             name: "LinkedIn",
@@ -113,6 +119,21 @@ function Footer2() {
                         ))}
                     </ul>
                 </nav>
+
+                <div className="mt-4">
+                    <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium">
+                        {legalLinks.map((link) => (
+                            <li key={link.name}>
+                                <a
+                                    href={link.href}
+                                    className="text-muted-foreground hover:text-primary transition-colors duration-300"
+                                >
+                                    {link.name}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
 
                 <div className="mt-6 flex justify-center gap-3">
                     {socialIcons.map((icon) => (

@@ -10,7 +10,7 @@ import { z } from "zod";
 const WHATSAPP_NUMBER = "919798973975"; // your number, country code, no '+' or spaces
 const EMAIL = "nandashankar26@gmail.com";
 const LINKEDIN_URL = "https://www.linkedin.com/in/shankar-kumar-nanda-04304a263";
-const CALENDLY_URL = "https://calendly.com/nandashankar26/free-15-min-strategy-call";
+const CALENDLY_URL = "https://calendly.com/scalefunnel/strategy-call-paid-free";
 
 /* ============================================================
    SVG ICONS (replacing lucide-react)

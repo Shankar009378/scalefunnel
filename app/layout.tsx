@@ -1,5 +1,6 @@
 import { Geist_Mono, Inter } from "next/font/google";
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
@@ -148,6 +149,10 @@ export default function RootLayout({
       )}
     >
       <body>
+        <Script
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          strategy="lazyOnload"
+        />
         <ThemeProvider>
           {children}
 
